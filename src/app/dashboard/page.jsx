@@ -8,41 +8,48 @@ export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
+    // Redirect hanya setelah status final
     useEffect(() => {
-        // Hanya redirect jika status benar-benar sudah selesai loading dan user tidak terautentikasi
         if (status === "unauthenticated") {
-            router.push("/login");
+            router.replace("/login");
         }
     }, [status, router]);
 
-    // 1. Tangani status loading dengan UI yang lebih bersih
+    // Loading state yang bersih & profesional
     if (status === "loading") {
         return (
-            <div className="flex h-96 items-center justify-center">
-                <p className="animate-pulse text-slate-500">Memuat data...</p>
+            <div className="flex min-h-[60vh] items-center justify-center">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="h-6 w-6 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+                    <p className="text-sm text-slate-500 animate-pulse">
+                        Memuat dashboard...
+                    </p>
+                </div>
             </div>
         );
     }
 
-    // 2. Proteksi Render: Jika tidak ada session (saat proses redirect), jangan render konten bawah.
-    // Ini mencegah error "Cannot read properties of null (reading 'user')"
-    if (!session?.user) {
+    // Saat redirect berlangsung, jangan render apa pun
+    if (status !== "authenticated") {
         return null;
     }
 
     return (
-        <div className="space-y-4">
-            <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+        <div className="space-y-6">
+            <h1 className="text-2xl font-bold text-slate-800">
+                Dashboard
+            </h1>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition hover:shadow-md">
                 <p className="text-slate-600">
                     Selamat datang kembali,
                     <span className="font-semibold text-indigo-600 ml-1">
-                        {session.user.name}
+                        {session.user.name || "User"}
                     </span>
                 </p>
-                <div className="mt-2 inline-block px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">
-                    Role: {session.user.role || "User"}
+
+                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+                    Role: {session.user.role ?? "USER"}
                 </div>
             </div>
         </div>

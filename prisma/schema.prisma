@@ -3,6 +3,7 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+//tanda ? pada field berarti opsional 
 
 generator client {
   provider = "prisma-client-js"
@@ -14,12 +15,24 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String?
-  email     String   @unique
-  password  String
-  role      Role     @default(USER) // Role-based: USER atau ADMIN
-  createdAt DateTime @default(now())
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  password String
+  role     Role    @default(USER)
+
+  // Forgot password
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
+  // Security
+  passwordChangedAt DateTime?
+
+  // Metadata
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([email]) // Opsional: mempercepat pencarian berdasarkan email
 }
 
 enum Role {
