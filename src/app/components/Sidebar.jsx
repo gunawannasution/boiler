@@ -24,13 +24,14 @@ export default function Sidebar() {
     const isActive = (path) => pathname === path;
 
     const menuItems = [
-        { name: "Beranda", href: "/", icon: Home },
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+        { name: "Beranda", href: "/dashboard", icon: Home },
+        // { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+        // { name: "Users", href: "/dashboard/users", icon: Users },
     ];
 
     const adminItems = [
-        { name: "Admin Panel", href: "/admin", icon: ShieldCheck },
-        { name: "Kelola User", href: "/admin/users", icon: Users },
+        // { name: "Admin Panel", href: "/dashboard", icon: ShieldCheck },
+        { name: "Kelola User", href: "/dashboard/users", icon: Users },
     ];
 
     return (
@@ -53,7 +54,7 @@ export default function Sidebar() {
                 </div>
                 {!isCollapsed && (
                     <span className="font-black text-xl text-white tracking-tight animate-in fade-in duration-500">
-                        PRO<span className="text-indigo-500">DASH</span>
+                        GUNA<span className="text-indigo-500">WAN</span>
                     </span>
                 )}
             </div>

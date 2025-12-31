@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import FormInput from "../../components/ui/FormInput";
 import Button from "../../components/ui/Button";
 import Toast from "../../components/ui/Toast";
+import { FiUserPlus } from "react-icons/fi";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -22,78 +23,104 @@ export default function RegisterPage() {
 
         try {
             await registerUser({ name, email, password });
-            setToast({ type: "success", text: "Pendaftaran berhasil! Mengarahkan ke halaman login..." });
-            setTimeout(() => router.push("/login"), 1800);
+            setToast({
+                type: "success",
+                text: "Pendaftaran berhasil. Mengarahkan ke login..."
+            });
+            setTimeout(() => router.push("/login"), 1600);
         } catch (err) {
-            setToast({ type: "error", text: err.message || "Terjadi kesalahan saat mendaftar." });
+            setToast({
+                type: "error",
+                text: err?.message || "Terjadi kesalahan saat mendaftar"
+            });
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 px-4 py-12">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-6">
-                <div className="text-center">
-                    <h1 className="text-3xl font-bold text-gray-800">Buat Akun</h1>
-                    <p className="text-gray-500 text-sm mt-2">Isi data di bawah untuk memulai</p>
-                </div>
+        <div className="min-h-[100dvh] flex items-center justify-center px-4 py-10 bg-gradient-to-br from-slate-50 via-white to-slate-100">
+            {/* Card */}
+            <div className="relative w-full max-w-md">
+                {/* Soft glow */}
+                <div className="absolute -inset-6 bg-indigo-100/40 rounded-[3rem] blur-2xl pointer-events-none" />
 
-                <form onSubmit={handleRegister} className="space-y-5">
-                    <FormInput
-                        placeholder="Nama lengkap"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={isLoading}
-                        required
-                    />
-                    <FormInput
-                        placeholder="Alamat email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        disabled={isLoading}
-                        required
-                    />
-                    <FormInput
-                        placeholder="Kata sandi"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        disabled={isLoading}
-                        required
-                    />
-                    <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full py-3 text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl font-medium transition duration-200"
-                    >
-                        {isLoading ? (
-                            <span className="flex items-center justify-center">
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Memproses...
-                            </span>
-                        ) : (
-                            "Daftar Sekarang"
-                        )}
-                    </Button>
-                </form>
+                <div className="relative bg-white rounded-[2.75rem] border border-slate-100 shadow-2xl shadow-slate-200/60 px-8 py-10">
+                    {/* Header */}
+                    <div className="text-center mb-8 space-y-2">
+                        <p className="text-[11px] font-black uppercase tracking-[0.35em] text-indigo-500">
+                            Registration
+                        </p>
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+                            Buat Akun Baru
+                        </h1>
+                        <p className="text-sm text-slate-500">
+                            Lengkapi data untuk mulai menggunakan sistem
+                        </p>
+                    </div>
 
-                <div className="text-center text-sm text-gray-500">
-                    Sudah punya akun?{" "}
-                    <button
-                        type="button"
-                        onClick={() => router.push("/login")}
-                        className="text-indigo-600 hover:underline font-medium"
-                    >
-                        Masuk di sini
-                    </button>
+                    {/* Form */}
+                    <form onSubmit={handleRegister} className="space-y-5">
+                        <FormInput
+                            placeholder="Nama lengkap"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            disabled={isLoading}
+                            required
+                        />
+
+                        <FormInput
+                            placeholder="Alamat email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={isLoading}
+                            required
+                        />
+
+                        <FormInput
+                            placeholder="Kata sandi"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            disabled={isLoading}
+                            required
+                        />
+
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 rounded-2xl font-bold text-white bg-slate-900 hover:bg-indigo-600 transition-all active:scale-[0.98] shadow-xl shadow-slate-200"
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Memproses...
+                                </span>
+                            ) : (
+                                <span className="flex items-center justify-center gap-2">
+                                    <FiUserPlus size={18} />
+                                    Daftar Sekarang
+                                </span>
+                            )}
+                        </Button>
+                    </form>
+
+                    {/* Footer */}
+                    <div className="mt-8 text-center text-sm text-slate-500">
+                        Sudah punya akun?{" "}
+                        <button
+                            type="button"
+                            onClick={() => router.push("/login")}
+                            className="font-bold text-indigo-600 hover:underline"
+                        >
+                            Masuk di sini
+                        </button>
+                    </div>
                 </div>
             </div>
 
+            {/* Toast */}
             {toast && (
                 <Toast
                     message={toast.text}

@@ -11,27 +11,27 @@ export const authOptions = {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
             },
-
             async authorize(credentials) {
-                // ✅ Validasi input dasar
                 if (!credentials?.email || !credentials?.password) {
-                    return null;
+                    throw new Error("Email dan Password wajib diisi");
                 }
 
                 const user = await prisma.user.findUnique({
                     where: { email: credentials.email },
                 });
 
-                if (!user || !user.password) return null;
+                // Cek keberadaan user dan status aktif
+                if (!user) throw new Error("Akun tidak ditemukan");
+                if (!user.isActive) throw new Error("Akun Anda telah dinonaktifkan");
 
                 const valid = await comparePassword(
                     credentials.password,
                     user.password
                 );
 
-                if (!valid) return null;
+                if (!valid) throw new Error("Password salah");
 
-                // ✅ Data minimal untuk session
+                // Return objek user (ini akan masuk ke JWT callback pertama kali)
                 return {
                     id: user.id,
                     name: user.name,
@@ -42,49 +42,51 @@ export const authOptions = {
             },
         }),
     ],
-
     session: {
         strategy: "jwt",
+        maxAge: 1 * 24 * 60 * 60, // 1 Hari (Standard 2025)
     },
-
     callbacks: {
-        /**
-         * JWT callback
-         * - sync role
-         * - invalidate token jika password berubah
-         */
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
+            // 1. Saat pertama kali Login
             if (user) {
+                token.id = user.id;
                 token.role = user.role;
                 token.passwordChangedAt = user.passwordChangedAt;
             }
 
-            // 🔐 invalidate session jika password diubah
-            if (
-                token.passwordChangedAt &&
-                token.iat * 1000 < new Date(token.passwordChangedAt).getTime()
-            ) {
-                return null;
+            // 2. Fitur Profesional: Update session secara dinamis (tanpa logout)
+            // Berguna saat admin mengubah role Anda saat Anda sedang login
+            if (trigger === "update" && session) {
+                return { ...token, ...session };
+            }
+
+            // 3. Keamanan: Cek Invalidate Session jika password berubah
+            if (token.passwordChangedAt) {
+                const changedTime = new Date(token.passwordChangedAt).getTime();
+                const tokenIssuedTime = token.iat * 1000;
+                if (tokenIssuedTime < changedTime) {
+                    return null; // Memaksa logout
+                }
             }
 
             return token;
         },
 
-        /**
-         * Session callback
-         */
         async session({ session, token }) {
-            if (session.user) {
+            if (token && session.user) {
+                session.user.id = token.id;
                 session.user.role = token.role;
             }
             return session;
         },
     },
-
     pages: {
         signIn: "/login",
         error: "/login",
     },
+    // Menambahkan Secret untuk keamanan JWT
+    secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
