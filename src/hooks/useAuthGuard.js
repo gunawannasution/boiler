@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 
 /**
  * Guard halaman berdasarkan session & role
- * @param {Object|null} session - session user
- * @param {string[]} allowedRoles - role yang diizinkan
+ * @param {Object|null} session
+ * @param {string[]} allowedRoles
  */
 export default function useAuthGuard(session, allowedRoles = []) {
     const router = useRouter();
@@ -23,5 +23,5 @@ export default function useAuthGuard(session, allowedRoles = []) {
         ) {
             router.replace("/unauthorized");
         }
-    }, [session, allowedRoles, router]);
+    }, [session, allowedRoles, router]); // ✅ lengkap
 }

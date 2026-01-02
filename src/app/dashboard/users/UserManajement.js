@@ -175,8 +175,8 @@ export default function UserManagement({ users = [] }) {
                 <button
                     onClick={() => openConfirmModal(u, "role")}
                     className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 border ${role === "ADMIN"
-                            ? "bg-indigo-50 text-indigo-600 border-indigo-100"
-                            : "bg-slate-50 text-slate-500 border-slate-100"
+                        ? "bg-indigo-50 text-indigo-600 border-indigo-100"
+                        : "bg-slate-50 text-slate-500 border-slate-100"
                         }`}
                 >
                     <FiShield size={12} />
@@ -192,8 +192,8 @@ export default function UserManagement({ users = [] }) {
                 <button
                     onClick={() => openConfirmModal(u, "status")}
                     className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border flex items-center gap-2 ${active
-                            ? "bg-green-50 text-green-700 border-green-100"
-                            : "bg-red-50 text-red-700 border-red-100"
+                        ? "bg-green-50 text-green-700 border-green-100"
+                        : "bg-red-50 text-red-700 border-red-100"
                         }`}
                 >
                     <span
@@ -302,7 +302,7 @@ export default function UserManagement({ users = [] }) {
                             <button
                                 onClick={handleConfirmReset}
                                 disabled={resetData?.loading}
-                                className="flex-[2] py-4 bg-slate-900 text-white rounded-2xl font-bold flex justify-center items-center gap-2"
+                                className="flex-2 py-4 bg-slate-900 text-white rounded-2xl font-bold flex justify-center items-center gap-2"
                             >
                                 {resetData?.loading ? (
                                     <FiRefreshCw className="animate-spin" />

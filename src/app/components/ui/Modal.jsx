@@ -1,6 +1,8 @@
 "use client";
 
 import { FiX } from "react-icons/fi";
+import { Dialog, Transition } from "@headlessui/react"
+
 
 export default function Modal({ isOpen, onClose, title, children }) {
     if (!isOpen) return null;
@@ -17,7 +19,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
             <div
                 className="
           relative w-full md:max-w-xl
-          max-h-[100dvh] md:max-h-[90vh]
+          max-h-dvh md:max-h-[90vh]
           bg-white
           rounded-t-[2.5rem] md:rounded-[2.75rem]
           shadow-2xl

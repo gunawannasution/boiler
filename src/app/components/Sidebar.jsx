@@ -26,12 +26,13 @@ export default function Sidebar() {
     const menuItems = [
         { name: "Beranda", href: "/dashboard", icon: Home },
         // { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-        // { name: "Users", href: "/dashboard/users", icon: Users },
+        { name: "Users", href: "/dashboard/users", icon: Users },
+        { name: "Products", href: "/dashboard/products", icon: Users },
     ];
 
     const adminItems = [
         // { name: "Admin Panel", href: "/dashboard", icon: ShieldCheck },
-        { name: "Kelola User", href: "/dashboard/users", icon: Users },
+        // { name: "Kelola User", href: "/dashboard/users", icon: Users },
     ];
 
     return (
